@@ -1,5 +1,6 @@
 package com.futsey;
 
+import com.futsey.entity.Role;
 import com.futsey.entity.User;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
@@ -22,6 +23,7 @@ public class HibernateRunner {
                     .lastname("Petrushin")
                     .birthDate(LocalDate.of(1980, 1, 1))
                     .age(42)
+                    .role(Role.ADMIN)
                     .build();
             session.save(user);
             session.getTransaction().commit();

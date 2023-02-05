@@ -8,8 +8,9 @@ import java.sql.Date;
 import java.util.Optional;
 
 /**
- * Инициализация конвертера ВАРИАНТ 2
+ * РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РєРѕРЅРІРµСЂС‚РµСЂР° Р’РђР РРђРќРў 2
  */
+
 @Converter(autoApply = true)
 public class BirthdayConverter implements AttributeConverter<Birthday, Date> {
 

@@ -4,6 +4,7 @@ import com.futsey.convereter.BirthdayConverter;
 import com.futsey.entity.Birthday;
 import com.futsey.entity.Role;
 import com.futsey.entity.User;
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import org.hibernate.*;
 import org.hibernate.cfg.Configuration;
 import java.sql.SQLException;
@@ -14,9 +15,10 @@ public class HibernateRunner {
     public static void main(String[] args) throws SQLException {
         Configuration configuration = new Configuration();
         /**
-         * »ÌËˆË‡ÎËÁ‡ˆËˇ ÍÓÌ‚ÂÚÂ‡ ¬¿–»¿Õ“ 2
+         * –ò–Ω–∏—Ü–∏–∞–ª–∏–∑–∞—Ü–∏—è –∫–æ–Ω–≤–µ—Ä—Ç–µ—Ä–∞ –í–ê–†–ò–ê–ù–¢ 2
          */
         configuration.addAttributeConverter(new BirthdayConverter());
+        configuration.registerTypeOverride(new JsonBinaryType());
         configuration.configure();
 
         try (SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -24,9 +26,15 @@ public class HibernateRunner {
             System.out.println("HibernateRunner{ main()}: Project started");
             session.beginTransaction();
             User user = User.builder()
-                    .username("Futsey1")
+                    .username("Futsey")
                     .firstname("Andrew")
                     .lastname("Petrushin")
+                    .info("""
+                            {
+                                "name": "Andrew",
+                                "id": 5
+                            }
+                                """)
                     .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
                     .role(Role.ADMIN)
                     .build();

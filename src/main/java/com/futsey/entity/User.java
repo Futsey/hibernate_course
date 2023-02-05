@@ -1,5 +1,6 @@
 package com.futsey.entity;
 
+import com.futsey.convereter.BirthdayConverter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,9 +21,14 @@ public class User {
     private String username;
     private String firstname;
     private String lastname;
+
+    /**
+     * Инициализация конвертера ВАРИАНТ 1
+     * @Convert(converter = BirthdayConverter.class)
+     */
     @Column(name ="birthdate")
-    private LocalDate birthDate;
-    private Integer age;
+    private Birthday birthDate;
+
     @Enumerated(EnumType.STRING)
     private Role role;
 }

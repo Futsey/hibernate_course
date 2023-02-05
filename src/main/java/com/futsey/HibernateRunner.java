@@ -1,5 +1,7 @@
 package com.futsey;
 
+import com.futsey.convereter.BirthdayConverter;
+import com.futsey.entity.Birthday;
 import com.futsey.entity.Role;
 import com.futsey.entity.User;
 import org.hibernate.*;
@@ -11,6 +13,10 @@ public class HibernateRunner {
 
     public static void main(String[] args) throws SQLException {
         Configuration configuration = new Configuration();
+        /**
+         * Инициализация конвертера ВАРИАНТ 2
+         */
+        configuration.addAttributeConverter(new BirthdayConverter());
         configuration.configure();
 
         try (SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -18,11 +24,10 @@ public class HibernateRunner {
             System.out.println("HibernateRunner{ main()}: Project started");
             session.beginTransaction();
             User user = User.builder()
-                    .username("Futsey")
+                    .username("Futsey1")
                     .firstname("Andrew")
                     .lastname("Petrushin")
-                    .birthDate(LocalDate.of(1980, 1, 1))
-                    .age(42)
+                    .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
                     .role(Role.ADMIN)
                     .build();
             session.save(user);

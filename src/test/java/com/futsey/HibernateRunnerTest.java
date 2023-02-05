@@ -1,5 +1,6 @@
 package com.futsey;
 
+import com.futsey.entity.Birthday;
 import com.futsey.entity.User;
 import org.junit.jupiter.api.Test;
 
@@ -29,8 +30,7 @@ class HibernateRunnerTest {
                 .username("Futsey")
                 .firstname("Andrew")
                 .lastname("Petrushin")
-                .birthDate(LocalDate.of(1980, 1, 1))
-                .age(42)
+                .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
                 .build();
         String sql = """
                 INSERT
@@ -60,12 +60,14 @@ class HibernateRunnerTest {
         System.out.println(sql.formatted(tableName, columnNames, columnValues));
 
         /** Пример базового коннекта:
+
         Connection connection = null;
         PreparedStatement ps = connection.prepareStatement(sql.formatted(tableName, columnNames, columnValues));
         for(Field declaredField : deckaredFields) {
             declaredField.setAccessible(true);
             ps.setObject(1, declaredField.get(user));
         }
+
          */
     }
 }

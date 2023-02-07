@@ -1,45 +1,52 @@
 package com.futsey;
 
-import com.futsey.convereter.BirthdayConverter;
-import com.futsey.entity.Birthday;
-import com.futsey.entity.Role;
 import com.futsey.entity.User;
-import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
+import com.futsey.util.HibernateUtil;
 import org.hibernate.*;
-import org.hibernate.cfg.Configuration;
 import java.sql.SQLException;
-import java.time.LocalDate;
 
 public class HibernateRunner {
 
     public static void main(String[] args) throws SQLException {
-        Configuration configuration = new Configuration();
-        /**
-         * Инициализация конвертера ВАРИАНТ 2
-         */
-        configuration.addAttributeConverter(new BirthdayConverter());
-        configuration.registerTypeOverride(new JsonBinaryType());
-        configuration.configure();
 
-        try (SessionFactory sessionFactory = configuration.buildSessionFactory();
-            Session session = sessionFactory.openSession()) {
-            System.out.println("HibernateRunner{ main()}: Project started");
-            session.beginTransaction();
-            User user = User.builder()
-                    .username("Futsey")
-                    .firstname("Andrew")
-                    .lastname("Petrushin")
-                    .info("""
-                            {
-                                "name": "Andrew",
-                                "id": 5
-                            }
-                                """)
-                    .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
-                    .role(Role.ADMIN)
-                    .build();
-            session.save(user);
-            session.getTransaction().commit();
-        };
+        User user = User.builder()
+                .username("Futsey1111")
+                .firstname("Andrew")
+                .lastname("Petrushin")
+                .build();
+
+        try (SessionFactory sessionFactory = HibernateUtil.buildSessionFactory()) {
+            try (Session session_1 = sessionFactory.openSession()) {
+                session_1.beginTransaction();
+
+                session_1.saveOrUpdate(user);
+                System.out.println("HibernateRunner{main() session_1}: Dirty session: on. User in cash 1: ".concat(String.valueOf(user)));
+                session_1.delete(user);
+                session_1.getTransaction().commit();
+            }
+            try (Session session_2 = sessionFactory.openSession()) {
+                session_2.beginTransaction();
+                System.out.println("HibernateRunner{main() session_1}: Dirty session: off. User in DB after session_1.delete(user): "
+                        .concat(String.valueOf(session_2.get(User.class, user.getFirstname()))));
+                user.setFirstname("Ivan");
+                System.out.println("HibernateRunner{main() session_2}: Dirty session: on. User in cash 1 with overridden firstname : "
+                        .concat(String.valueOf(user)));
+                // example .merge()
+                    // session_2.refresh(user);
+                    // User userInDB = session_2.get(User.class, user.getFirstname());
+                    // user.setUsername(userInDB.getUsername());
+                    // user.setFirstname(userInDB.getFirstname());
+                    // user.setLastname(userInDB.getLastname());
+                    // etc...
+                // example .merge()
+                    // session_2.refresh(user);
+                    // User userInDB = session_2.get(User.class, user.getFirstname());
+                    // userInDB.setUsername(user.getUsername());
+                    // userInDB.setFirstname(user.getFirstname());
+                    // userInDB.setLastname(user.getLastname());
+                    // etc...
+                session_2.getTransaction().commit();
+            }
+        }
     }
 }

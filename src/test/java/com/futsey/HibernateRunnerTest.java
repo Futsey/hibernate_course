@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;

@@ -24,10 +24,6 @@ public class User {
     private String firstname;
     private String lastname;
 
-    /**
-     * Инициализация конвертера ВАРИАНТ 1
-     * @Convert(converter = BirthdayConverter.class)
-     */
     @Column(name ="birthdate")
     private Birthday birthDate;
 

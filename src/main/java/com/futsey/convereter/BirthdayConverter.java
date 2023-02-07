@@ -7,10 +7,6 @@ import javax.persistence.Converter;
 import java.sql.Date;
 import java.util.Optional;
 
-/**
- * Инициализация конвертера ВАРИАНТ 2
- */
-
 @Converter(autoApply = true)
 public class BirthdayConverter implements AttributeConverter<Birthday, Date> {
 

@@ -18,11 +18,10 @@ public class User {
 
     @Id
     private String username;
-    private String firstname;
-    private String lastname;
 
-    @Column(name ="birthdate")
-    private Birthday birthDate;
+    @Embedded
+    @AttributeOverride(name = "birthDate", column = @Column(name = "birthdate"))
+    private PersonalInfo personalInfo;
 
     @Type(type = "jsonb")
     private String info;

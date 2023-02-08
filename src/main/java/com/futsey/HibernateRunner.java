@@ -3,6 +3,9 @@ package com.futsey;
 import com.futsey.entity.User;
 import com.futsey.util.HibernateUtil;
 import org.hibernate.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.sql.SQLException;
 
 public class HibernateRunner {
@@ -31,15 +34,15 @@ public class HibernateRunner {
                 user.setFirstname("Ivan");
                 System.out.println("HibernateRunner{main() session_2}: Dirty session: on. User in cash 1 with overridden firstname : "
                         .concat(String.valueOf(user)));
-                // example .merge()
+                // example .refresh() !!!!!UserInDB важнее User!!!!!
                     // session_2.refresh(user);
                     // User userInDB = session_2.get(User.class, user.getFirstname());
                     // user.setUsername(userInDB.getUsername());
                     // user.setFirstname(userInDB.getFirstname());
                     // user.setLastname(userInDB.getLastname());
                     // etc...
-                // example .merge()
-                    // session_2.refresh(user);
+                // example .merge() !!!!!User важнее userInDB!!!!!
+                    // session_2.merge(user);
                     // User userInDB = session_2.get(User.class, user.getFirstname());
                     // userInDB.setUsername(user.getUsername());
                     // userInDB.setFirstname(user.getFirstname());

@@ -13,5 +13,6 @@
     <property name="format_sql">true</property>
 
     <mapping class="com.futsey.entity.User"></mapping>
+    <mapping class="com.futsey.entity.Company"></mapping>
   </session-factory>
 </hibernate-configuration>

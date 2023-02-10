@@ -1,7 +1,11 @@
 package com.futsey;
 
 import com.futsey.entity.Birthday;
+import com.futsey.entity.Company;
+import com.futsey.entity.PersonalInfo;
 import com.futsey.entity.User;
+import com.futsey.util.HibernateUtil;
+import lombok.Cleanup;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Column;
@@ -17,6 +21,19 @@ import static java.util.stream.Collectors.joining;
 
 class HibernateRunnerTest {
 
+    @Test
+    void oneToMany() {
+        @Cleanup var sessionFactory = HibernateUtil.buildSessionFactory();
+        @Cleanup var session = sessionFactory.openSession();
+        session.beginTransaction();
+
+        var company = session.get(Company.class, 35);
+        System.out.println("");
+
+        session.getTransaction().commit();
+    }
+
+
     /** Простая реализация класса Session
      * @see org.hibernate.Session
      * @throws SQLException
@@ -26,9 +43,11 @@ class HibernateRunnerTest {
     void checkReflectionAPI() throws SQLException, IllegalAccessException {
         User user = User.builder()
                 .username("Futsey")
-                .firstname("Andrew")
-                .lastname("Petrushin")
-                .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
+                .personalInfo(PersonalInfo.builder()
+                        .firstname("Andrew")
+                        .lastname("Petrushin")
+                        .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
+                        .build())
                 .build();
         String sql = """
                 INSERT

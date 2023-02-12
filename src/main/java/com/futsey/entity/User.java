@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Builder
 @Entity
 @EqualsAndHashCode(of = "username")
-@ToString(exclude = "company")
+@ToString(exclude = {"company", "profile"})
 @Table(name = "users", schema = "public")
 public class User {
 
@@ -34,4 +34,7 @@ public class User {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Profile profile;
 }

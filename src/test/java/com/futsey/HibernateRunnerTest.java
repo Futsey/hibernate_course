@@ -1,9 +1,6 @@
 package com.futsey;
 
-import com.futsey.entity.Birthday;
-import com.futsey.entity.Company;
-import com.futsey.entity.PersonalInfo;
-import com.futsey.entity.User;
+import com.futsey.entity.*;
 import com.futsey.util.HibernateUtil;
 import lombok.Cleanup;
 import org.hibernate.Hibernate;
@@ -22,6 +19,31 @@ import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
 class HibernateRunnerTest {
+
+    @Test
+    void checkOneToOne() {
+        try (var sessionFactory = HibernateUtil.buildSessionFactory();
+             var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            var user = session.get(User.class, 11L);
+            System.out.println();
+
+//            var user = User.builder()
+//                    .username("Andrew@gmail.com")
+//                    .build();
+//            var profile = Profile.builder()
+//                    .street("Lenina")
+//                    .language("ru")
+//                    .build();
+//            session.save(user);
+//            profile.setUser(user);
+
+//            session.save(profile);
+
+            session.getTransaction().commit();
+        }
+    }
 
     @Test
     void checkOrphanRemoval() {

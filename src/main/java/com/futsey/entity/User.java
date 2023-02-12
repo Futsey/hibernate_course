@@ -10,6 +10,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@EqualsAndHashCode(of = "username")
 @ToString(exclude = "company")
 @Table(name = "users", schema = "public")
 public class User {
@@ -30,7 +31,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "company_id")
     private Company company;
 }

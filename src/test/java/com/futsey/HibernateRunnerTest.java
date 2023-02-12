@@ -6,6 +6,7 @@ import com.futsey.entity.PersonalInfo;
 import com.futsey.entity.User;
 import com.futsey.util.HibernateUtil;
 import lombok.Cleanup;
+import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Column;
@@ -14,12 +15,41 @@ import java.lang.reflect.Field;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
 import static java.util.stream.Collectors.joining;
 
 class HibernateRunnerTest {
+
+    @Test
+    void checkOrphanRemoval() {
+        try (var sessionFactory = HibernateUtil.buildSessionFactory();
+             var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            Company company = session.getReference(Company.class, 9);
+            company.getUsers().removeIf(user -> user.getId() == 9L);
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
+    void checkLazyInit() {
+        Company company = null;
+        try (var sessionFactory = HibernateUtil.buildSessionFactory();
+            var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            company = session.getReference(Company.class, 1);
+            System.out.println();
+
+            session.getTransaction().commit();
+        }
+        var users = company.getUsers();
+        System.out.println(users.size());
+    }
 
     @Test
     void deleteUserFromCompany() {
@@ -39,17 +69,19 @@ class HibernateRunnerTest {
         @Cleanup var session = sessionFactory.openSession();
         session.beginTransaction();
 
-        var company = Company.builder()
-                .name("Apple")
-                .build();
+//        var company = Company.builder()
+//                .name("Apple")
+//                .build();
+
+        var company = session.get(Company.class, 9);
 
         var user = User.builder()
-                .username("Oleg")
+                .username("Oleg1")
                 .build();
 //        user.setCompany(company);
 //        company.getUsers().add(user);
         company.addUser(user);
-        session.save(company);
+        session.saveOrUpdate(company);
 
         session.getTransaction().commit();
     }

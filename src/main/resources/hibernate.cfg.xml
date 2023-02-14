@@ -15,5 +15,6 @@
     <mapping class="com.futsey.entity.User"></mapping>
     <mapping class="com.futsey.entity.Company"></mapping>
     <mapping class="com.futsey.entity.Profile"></mapping>
+    <mapping class="com.futsey.entity.Chat"></mapping>
   </session-factory>
 </hibernate-configuration>

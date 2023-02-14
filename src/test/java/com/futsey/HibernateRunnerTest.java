@@ -3,16 +3,15 @@ package com.futsey;
 import com.futsey.entity.*;
 import com.futsey.util.HibernateUtil;
 import lombok.Cleanup;
-import org.hibernate.Hibernate;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
 import java.lang.reflect.Field;
 import java.sql.SQLException;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -27,12 +26,17 @@ class HibernateRunnerTest {
             session.beginTransaction();
 
             var user = session.get(User.class, 16L);
-
-            Chat chat = Chat.builder()
-                    .name("someChat")
+            var chat = session.get(Chat.class, 1L);
+            var userChat = UserChat.builder()
+                    .created_add(Instant.now())
+                    .created_by(user.getUsername())
                     .build();
-            user.addChat(chat);
-            session.save(chat);
+
+            userChat.setUser(user);
+            userChat.setChat(chat);
+
+            session.save(userChat);
+
             System.out.println();
 
             session.getTransaction().commit();

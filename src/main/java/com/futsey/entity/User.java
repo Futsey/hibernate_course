@@ -1,7 +1,9 @@
 package com.futsey.entity;
 
+import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import lombok.*;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.TypeDef;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ import java.util.List;
 @EqualsAndHashCode(of = "username")
 @ToString(exclude = {"company", "profile", "userChats"})
 @Table(name = "users", schema = "public")
+@TypeDef(name = "fut", typeClass = JsonBinaryType.class)
 public class User {
 
     @Id
@@ -27,8 +30,8 @@ public class User {
     @AttributeOverride(name = "birthDate", column = @Column(name = "birthdate"))
     private PersonalInfo personalInfo;
 
-//    @Type(type = "jsonb")
-//    private String info;
+    @Type(type = "jsonb")
+    private String info;
 
     @Enumerated(EnumType.STRING)
     private Role role;

@@ -1,6 +1,7 @@
 package com.futsey;
 
 import com.futsey.entity.*;
+import com.futsey.util.HibernateTestUtil;
 import com.futsey.util.HibernateUtil;
 import lombok.Cleanup;
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,6 @@ import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 import static java.util.Optional.ofNullable;
@@ -22,7 +22,7 @@ class HibernateRunnerTest {
 
     @Test
     void checkH2() {
-        try (var sessionFactory = HibernateUtil.buildSessionFactory();
+        try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {
             session.beginTransaction();
 
@@ -30,6 +30,8 @@ class HibernateRunnerTest {
                     .name("Sber")
                     .build();
             session.save(company);
+
+            session.getTransaction().commit();
         }
     }
 

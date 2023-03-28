@@ -11,11 +11,15 @@ public class HibernateUtil {
 
     public static SessionFactory buildSessionFactory() {
 
+        Configuration configuration = buildConfig();
+        configuration.configure();
+        return configuration.buildSessionFactory();
+    }
+
+    public static Configuration buildConfig() {
         Configuration configuration = new Configuration();
         configuration.addAttributeConverter(new BirthdayConverter());
         configuration.registerTypeOverride(new JsonBinaryType());
-        configuration.configure();
-
-        return configuration.buildSessionFactory();
+        return configuration;
     }
 }

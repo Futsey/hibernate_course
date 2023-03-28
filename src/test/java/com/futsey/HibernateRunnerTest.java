@@ -27,8 +27,9 @@ class HibernateRunnerTest {
             session.beginTransaction();
 
             var company = session.get(Company.class, 9);
-            company.getLocaleList().add(LocaleInfo.of("ru", "описание на русском"));
-            company.getLocaleList().add(LocaleInfo.of("en", "desc in english"));
+//            company.getLocaleList().add(LocaleInfo.of("ru", "описание на русском"));
+//            company.getLocaleList().add(LocaleInfo.of("en", "desc in english"));
+            company.getUsers().forEach(System.out::println);
 
             session.getTransaction().commit();
         }

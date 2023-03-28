@@ -25,6 +25,7 @@ dependencies {
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+    testImplementation 'com.h2database:h2:2.1.214'
 
     implementation 'com.vladmihalcea:hibernate-types-52:2.12.1'
     implementation 'org.slf4j:slf4j-api:2.0.6'

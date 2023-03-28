@@ -27,8 +27,8 @@ public class User {
     @AttributeOverride(name = "birthDate", column = @Column(name = "birthdate"))
     private PersonalInfo personalInfo;
 
-    @Type(type = "jsonb")
-    private String info;
+//    @Type(type = "jsonb")
+//    private String info;
 
     @Enumerated(EnumType.STRING)
     private Role role;

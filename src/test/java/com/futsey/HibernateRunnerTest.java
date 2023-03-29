@@ -21,6 +21,41 @@ import static java.util.stream.Collectors.joining;
 class HibernateRunnerTest {
 
     @Test
+    void tablePerClass() {
+        try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
+             var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            var company = Company.builder()
+                    .name("Sber")
+                    .build();
+            session.save(company);
+
+            Programmer programmer = Programmer.builder()
+                    .username("Bob")
+                    .language(Language.JAVA)
+                    .company(company)
+                    .build();
+            session.save(programmer);
+
+            Manager manager = Manager.builder()
+                    .username("Bob")
+                    .projectName("Search System")
+                    .company(company)
+                    .build();
+            session.save(manager);
+            session.flush();
+            session.clear();
+
+            Programmer dBProgrammer = session.get(Programmer.class, 1L);
+            Manager dBManager = session.get(Manager.class, 2L);
+
+            System.out.println();
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
     void checkDockerTest() {
         try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {
@@ -73,15 +108,15 @@ class HibernateRunnerTest {
 
             var user = session.get(User.class, 16L);
             var chat = session.get(Chat.class, 1L);
-            var userChat = UserChat.builder()
-                    .created_add(Instant.now())
-                    .created_by(user.getUsername())
-                    .build();
-
-            userChat.setUser(user);
-            userChat.setChat(chat);
-
-            session.save(userChat);
+//            var userChat = UserChat.builder()
+//                    .created_add(Instant.now())
+//                    .created_by(user.getUsername())
+//                    .build();
+//
+//            userChat.setUser(user);
+//            userChat.setChat(chat);
+//
+//            session.save(userChat);
 
             System.out.println();
 
@@ -164,12 +199,12 @@ class HibernateRunnerTest {
 
         var company = session.get(Company.class, 9);
 
-        var user = User.builder()
-                .username("Oleg1")
-                .build();
+//        var user = User.builder()
+//                .username("Oleg1")
+//                .build();
 //        user.setCompany(company);
 //        company.getUsers().add(user);
-        company.addUser(user);
+//        company.addUser(user);
         session.saveOrUpdate(company);
 
         session.getTransaction().commit();
@@ -195,40 +230,40 @@ class HibernateRunnerTest {
      */
     @Test
     void checkReflectionAPI() throws SQLException, IllegalAccessException {
-        User user = User.builder()
-                .username("Futsey")
-                .personalInfo(PersonalInfo.builder()
-                        .firstname("Andrew")
-                        .lastname("Petrushin")
-                        .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
-                        .build())
-                .build();
-        String sql = """
-                INSERT
-                INTO
-                %s
-                (%s)
-                VALUSES
-                (%s)
-                
-                """;
-        String tableName = ofNullable(user.getClass().getAnnotation(Table.class))
-                .map(tableAnnotation -> tableAnnotation.schema() + "." + tableAnnotation.name())
-                .orElse(user.getClass().getName());
+//        User user = User.builder()
+//                .username("Futsey")
+//                .personalInfo(PersonalInfo.builder()
+//                        .firstname("Andrew")
+//                        .lastname("Petrushin")
+//                        .birthDate(new Birthday(LocalDate.of(1980, 1, 1)))
+//                        .build())
+//                .build();
+//        String sql = """
+//                INSERT
+//                INTO
+//                %s
+//                (%s)
+//                VALUSES
+//                (%s)
+//
+//                """;
+//        String tableName = ofNullable(user.getClass().getAnnotation(Table.class))
+//                .map(tableAnnotation -> tableAnnotation.schema() + "." + tableAnnotation.name())
+//                .orElse(user.getClass().getName());
+//
+//        Field[] deckaredFields = user.getClass().getDeclaredFields();
+//
+//        String columnNames = Arrays.stream(deckaredFields)
+//                .map(field -> ofNullable(field.getAnnotation(Column.class))
+//                        .map(Column::name)
+//                        .orElse(field.getName()))
+//                .collect(joining(", "));
+//
+//        String columnValues = Arrays.stream(deckaredFields)
+//                .map(field -> "?")
+//                .collect(Collectors.joining(", "));
 
-        Field[] deckaredFields = user.getClass().getDeclaredFields();
-
-        String columnNames = Arrays.stream(deckaredFields)
-                .map(field -> ofNullable(field.getAnnotation(Column.class))
-                        .map(Column::name)
-                        .orElse(field.getName()))
-                .collect(joining(", "));
-
-        String columnValues = Arrays.stream(deckaredFields)
-                .map(field -> "?")
-                .collect(Collectors.joining(", "));
-
-        System.out.println(sql.formatted(tableName, columnNames, columnValues));
+//        System.out.println(sql.formatted(tableName, columnNames, columnValues));
 
         /** Пример базового коннекта:
 

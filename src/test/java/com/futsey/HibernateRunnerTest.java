@@ -21,6 +21,27 @@ import static java.util.stream.Collectors.joining;
 class HibernateRunnerTest {
 
     @Test
+    void hql() {
+        try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
+             var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            session.createQuery("select u from User u");
+            var query = session.createQuery(
+                    "select u "
+                            + "from User u "
+                            + "join u.company c "
+                            + "where u.personalInfo.firstname = :fbob and c.name = :fcompanyname",
+                    User.class)
+                    .setParameter("fbob", "bob")
+                    .setParameter("fcompanyname", "Sber")
+                    .list();
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
     void tablePerClass() {
         try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {

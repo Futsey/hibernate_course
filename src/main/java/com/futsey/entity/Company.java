@@ -15,11 +15,11 @@ import java.util.Set;
 @ToString(exclude = "users")
 @EqualsAndHashCode(of = "name")
 @Builder
-public class Company {
+public class Company extends AuditableEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String name;
 

@@ -18,11 +18,11 @@ import java.util.List;
 @ToString(exclude = {"company", "profile", "userChats"})
 @Table(name = "users", schema = "public")
 @TypeDef(name = "fut", typeClass = JsonBinaryType.class)
-public class User {
+public class User implements BaseEntity<Long>{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String username;
 

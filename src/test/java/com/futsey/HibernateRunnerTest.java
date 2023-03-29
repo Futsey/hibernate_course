@@ -21,6 +21,21 @@ import static java.util.stream.Collectors.joining;
 class HibernateRunnerTest {
 
     @Test
+    void checkDockerTest() {
+        try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
+             var session = sessionFactory.openSession()) {
+            session.beginTransaction();
+
+            var company = Company.builder()
+                    .name("Sber")
+                    .build();
+            session.save(company);
+
+            session.getTransaction().commit();
+        }
+    }
+
+    @Test
     void checkH2() {
         try (var sessionFactory = HibernateTestUtil.buildSessionFactory();
              var session = sessionFactory.openSession()) {

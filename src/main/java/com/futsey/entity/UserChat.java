@@ -11,11 +11,11 @@ import java.time.Instant;
 @AllArgsConstructor
 @Builder
 @Table(name = "users_chat")
-public class UserChat {
+public class UserChat  extends AuditableEntity<Long> {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id") //необязательное поле (хибер сам подставляет к названию поля "user" суффикс "_id")
@@ -23,10 +23,6 @@ public class UserChat {
 
     @ManyToOne
     Chat chat;
-
-    private Instant created_add;
-
-    private String created_by;
 
     public void setUser(User user) {
         this.user = user;
